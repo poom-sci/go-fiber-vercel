@@ -10,7 +10,7 @@ var (
 	app *fiber.App
 )
 
-func main() {
+func init() {
 	app = fiber.New()
 
 	app.Get("/", func(c *fiber.Ctx) {
