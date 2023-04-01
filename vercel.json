@@ -2,8 +2,8 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "source": "/api(.*)",
+      "destination": "/api/main.go"
     }
   ]
 }
