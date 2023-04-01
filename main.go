@@ -47,5 +47,5 @@ func main() {
 		port = ":3000"
 	}
 
-	app.Listen("localhost" + port)
+	app.Listen(port)
 }
