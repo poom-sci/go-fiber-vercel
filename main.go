@@ -1,32 +1,27 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/gofiber/adaptor"
 	"github.com/gofiber/fiber"
 )
 
-// var (
-// 	app *fiber.App
-// )
+var (
+	app *fiber.App
+)
 
-// func init() {
-// 	app = fiber.New()
-
-// 	app.Get("/", func(c *fiber.Ctx) {
-// 		c.Send("Hello, World!")
-// 	})
-
-// 	// app.Listen(3000)
-// }
-
-// ADD THIS SCRIPT
-func Handler(c *fiber.Ctx) {
-	app := fiber.New()
+func init() {
+	app = fiber.New()
 
 	app.Get("/", func(c *fiber.Ctx) {
 		c.Send("Hello, World!")
 	})
 
-	adaptor.HTTPHandler(app).ServeHTTP(c)
+	app.Listen(3000)
+}
 
+// handler is the entry point for the Cloud Function.
+func handler(w http.ResponseWriter, r *http.Request) {
+	adaptor.HTTPHandler(app)(w, r)
 }
