@@ -1,27 +1,32 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gofiber/adaptor/v2"
 	"github.com/gofiber/fiber/v2"
 )
 
+var (
+	app *fiber.App
+)
+
 func main() {
-	// New fiber app
 	app := fiber.New()
 
-	// http middleware -> fiber.Handler
-	app.Use(adaptor.HTTPMiddleware(logMiddleware))
+	// app.Get("/greet", greet)
 
 	// Listen on port 3000
-	app.Listen(":3000")
+	http.ListenAndServe(":3000", adaptor.FiberApp(app))
 }
 
-func logMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("log middleware")
-		next.ServeHTTP(w, r)
-	})
+func greet(c *fiber.Ctx) error {
+	return c.SendString("Hello World!")
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	// add fiber app to handle request
+	// http.ListenAndServe(":3000", adaptor.FiberApp(app))
+	app.Get("/greet", greet)
+
 }
