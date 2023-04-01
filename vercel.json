@@ -1,5 +1,11 @@
 {
-  "routes": [
-    { "src": "/(.*)", "dest": "/api" }
-  ]
+	"trailingSlash":false,
+	"rewrites":
+	[
+		{
+			"source":"/api(.*)",
+			"destination":"/api/entrypoint.go"
+		}
+	]
+
 }
