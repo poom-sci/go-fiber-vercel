@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/valyala/fasthttp"
 )
 
 var (
@@ -25,7 +26,28 @@ func init() {
 
 // ADD THIS SCRIPT
 func Handler(w http.ResponseWriter, r *http.Request) {
-	app.Handler()(w, r)
+	// Create a new fasthttp.RequestCtx object
+	req := new(fasthttp.RequestCtx)
+	req.Request.SetRequestURI(r.RequestURI)
+	req.Request.Header.SetMethod(r.Method)
+	// r.Header.VisitAll(func(key, value []byte) {
+	// 	req.Request.Header.Set(key, value)
+	// })
+	for k, v := range r.Header {
+		req.Request.Header.Set(k, v[0])
+	}
+	// req.Request.SetBodyStream(r.Body, r.ContentLength)
+	// req.Request.SetBody(r.Body)
+
+	app.Handler()(req)
+
+	for k, v := range req.Response.Header.Header() {
+		// w.Header().Set(k, string(v))
+		w.Header().Set(string(rune(k)), string(v))
+	}
+	w.WriteHeader(req.Response.StatusCode())
+	w.Write(req.Response.Body())
+
 }
 
 func main() {
