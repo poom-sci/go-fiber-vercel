@@ -18,7 +18,7 @@ func init() {
 		c.Send("Hello, World!")
 	})
 
-	app.Listen(3000)
+	app.Listen(8080)
 }
 
 // handler is the entry point for the Cloud Function.
