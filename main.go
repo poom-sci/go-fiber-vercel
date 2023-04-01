@@ -1,8 +1,7 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/gofiber/adaptor"
 	"github.com/gofiber/fiber"
 )
 
@@ -17,10 +16,11 @@ func init() {
 		c.Send("Hello, World!")
 	})
 
-	// app.Listen(8080)
+	app.Listen(3000)
 }
 
 // ADD THIS SCRIPT
-func Handler(w http.ResponseWriter, r *http.Request) {
-	app.Listen(3000)
+func Handler(c *fiber.Ctx) {
+	adaptor.HTTPHandler(app).ServeHTTP(c)
+
 }
