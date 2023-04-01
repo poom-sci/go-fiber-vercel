@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,7 +26,14 @@ func main() {
 	// recover from panic
 	app.Use(recover.New())
 
-	app.Use(logger.New())
+	if os.Getenv("ENV") == "production" {
+		// app.Use(helmet.New())
+		// app.Use(limiter.New())
+		// app.Use(requestid.New())
+		// app.Use(timeout.New())
+		// app.Use(proxy.New())
+		app.Use(logger.New())
+	}
 
 	// app.Get("/metrics", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
 
@@ -37,10 +43,8 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = ":3000"
 	}
 
-	app.Listen("0.0.0.0:" + port)
-
-	log.Fatal(app.Listen(":" + port))
+	app.Listen("localhost" + port)
 }
