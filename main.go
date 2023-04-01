@@ -1,8 +1,12 @@
 package main
 
-import "github.com/gofiber/fiber"
+import (
+	"net/http"
 
-func main() {
+	"github.com/gofiber/fiber"
+)
+
+func Handler(w http.ResponseWriter, r *http.Request) {
 	app := fiber.New()
 
 	app.Get("/", func(c *fiber.Ctx) {
