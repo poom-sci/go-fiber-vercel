@@ -1,31 +1,36 @@
-package api
+package main
 
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
 var (
-	app *gin.Engine
+	app *fiber.App
 )
 
-// CREATE ENDPOIND
-
-func myRoute(r *gin.RouterGroup) {
-	r.GET("/admin", func(c *gin.Context) {
-		c.String(http.StatusOK, "Hello from golang in vercel")
+// CREATE ENDPOINT
+func myRoute(r fiber.Router) {
+	r.Get("/admin", func(c *fiber.Ctx) error {
+		return c.SendString("Hello from golang in vercel")
 	})
 }
 
 func init() {
-	app = gin.New()
+	app = fiber.New()
 	r := app.Group("/")
 	myRoute(r)
-
 }
 
 // ADD THIS SCRIPT
 func Handler(w http.ResponseWriter, r *http.Request) {
-	app.ServeHTTP(w, r)
+	app.Handler()(w, r)
+}
+
+func main() {
+	err := http.ListenAndServe(":3000", http.HandlerFunc(Handler))
+	if err != nil {
+		panic(err)
+	}
 }
