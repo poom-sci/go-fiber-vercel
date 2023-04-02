@@ -27,16 +27,30 @@ func main() {
 	// recover from panic
 	app.Use(recover.New())
 
-	if os.Getenv("ENV") == "production" {
-		// app.Use(helmet.New())
-		// app.Use(limiter.New())
-		// app.Use(requestid.New())
-		// app.Use(timeout.New())
-		// app.Use(proxy.New())
-		app.Use(logger.New())
-	}
+	app.Use(logger.New())
+	// if os.Getenv("ENV") == "production" {
+	// 	// app.Use(helmet.New())
+	// 	// app.Use(limiter.New())
+	// 	// app.Use(requestid.New())
+	// 	// app.Use(timeout.New())
+	// 	// app.Use(proxy.New())
+	// }
 
 	app.Get("/metrics", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
+
+	// app.Get("/ocr", func(c *fiber.Ctx) error {
+
+	// 	imagePath := c.Query("image")
+	// 	if imagePath == "" {
+	// 		return c.SendString("Image path is required")
+	// 	}
+
+	// 	client := gosseract.NewClient()
+	// 	defer client.Close()
+	// 	client.SetImage("test.png")
+	// 	text, _ := client.Text()
+	// 	return c.SendString(text)
+	// })
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
@@ -44,7 +58,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = "3001"
 	}
 
 	app.Listen("0.0.0.0:" + port)
